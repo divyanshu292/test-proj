@@ -1,100 +1,44 @@
-
-// import * as React from 'react'
-// import { useState, useEffect } from 'react'
-// import { Outlet } from 'react-router-dom'
-// import Sidebar from '../components/Sidebar'
-// import { useAuth } from '../contexts/AuthContext'
-// import { Button } from '@/components/ui/button'
-// import { Menu } from 'lucide-react'
-
-// const MainLayout: React.FC = () => {
-//   const { currentUser } = useAuth()
-//   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true)
-  
-//   // Close sidebar on mobile when clicking outside
-//   useEffect(() => {
-//     const handleResize = () => {
-//       if (window.innerWidth >= 768) {
-//         setSidebarOpen(true);
-//       }
-//     };
-
-//     window.addEventListener('resize', handleResize);
-//     return () => window.removeEventListener('resize', handleResize);
-//   }, []);
-  
-//   return (
-//     <div className="flex h-screen overflow-hidden bg-gray-50">
-//       {/* Mobile sidebar toggle */}
-//       <div className="fixed top-4 left-4 z-50 md:hidden">
-//         <Button 
-//           variant="outline" 
-//           size="icon" 
-//           onClick={() => setSidebarOpen(!sidebarOpen)}
-//           className="rounded-full shadow-md bg-white"
-//         >
-//           <Menu className="h-5 w-5" />
-//         </Button>
-//       </div>
-      
-//       {/* Sidebar */}
-//       <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-//         fixed inset-y-0 left-0 z-40 w-64 transition-transform duration-300 ease-in-out md:translate-x-0 md:relative md:w-80`}
-//       >
-//         <Sidebar />
-//       </div>
-      
-//       {/* Main content */}
-//       <div className="flex-1 overflow-auto relative">
-//         <Outlet />
-//       </div>
-      
-//       {/* Mobile overlay */}
-//       {sidebarOpen && (
-//         <div 
-//           className="fixed inset-0 z-30 bg-black/50 md:hidden" 
-//           onClick={() => setSidebarOpen(false)}
-//         />
-//       )}
-//     </div>
-//   )
-// }
-
-// export default MainLayout
-
-
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import { useAuth } from '../contexts/AuthContext'
 import { Button } from '@/components/ui/button'
-import { Menu } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Menu } from 'lucide-react'
 
 const MainLayout: React.FC = () => {
   const { currentUser } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true)
   
-  // Close sidebar on mobile when clicking outside
+  // Handle responsive behavior
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth < 768) {
+        setSidebarOpen(false);
+      } else {
         setSidebarOpen(true);
       }
     };
 
+    // Set initial state based on screen size
+    handleResize();
+    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+  
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
-      {/* Mobile sidebar toggle */}
-      <div className="fixed top-2 left-2 z-50 md:hidden">
+      {/* Mobile sidebar toggle - only visible on mobile */}
+      <div className={`fixed top-4 left-4 z-50 md:hidden ${sidebarOpen ? 'hidden' : 'block'}`}>
         <Button 
           variant="outline" 
           size="icon" 
-          onClick={() => setSidebarOpen(!sidebarOpen)}
+          onClick={toggleSidebar}
           className="rounded-full shadow-md bg-white"
         >
           <Menu className="h-5 w-5" />
@@ -102,22 +46,60 @@ const MainLayout: React.FC = () => {
       </div>
       
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-        fixed inset-y-0 left-0 z-40 w-64 transition-transform duration-300 ease-in-out md:translate-x-0 md:relative md:w-64`}
+      <div 
+        className={`
+          fixed md:static inset-y-0 left-0 z-40 
+          transition-all duration-300 ease-in-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:-translate-x-64'} 
+          ${sidebarOpen ? 'w-64' : 'w-0 md:w-0 overflow-hidden'}
+        `}
       >
-        <Sidebar />
+        <div className="h-full relative">
+          <Sidebar />
+          
+          {/* Desktop sidebar toggle - shown on right edge of sidebar */}
+          <div className="hidden md:block absolute -right-3 top-1/2 transform -translate-y-1/2">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={toggleSidebar}
+              className="rounded-full h-6 w-6 shadow-md bg-white border border-gray-200"
+            >
+              {sidebarOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
       </div>
       
       {/* Main content */}
-      <div className="flex-1 overflow-auto relative p-0">
-        <Outlet />
+      <div className={`
+        flex-1 overflow-auto relative p-0
+        ${!sidebarOpen && 'ml-0'}
+        transition-all duration-300
+      `}>
+        {/* Desktop collapsed sidebar toggle button */}
+        {!sidebarOpen && (
+          <div className="hidden md:block absolute left-4 top-4 z-10">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={toggleSidebar}
+              className="rounded-full h-8 w-8 shadow-md bg-white"
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+        <div className={`${!sidebarOpen ? 'md:pl-14' : ''} h-full`}>
+          <Outlet />
+        </div>
       </div>
       
-      {/* Mobile overlay */}
+      {/* Mobile overlay - only appears when sidebar is open on mobile */}
       {sidebarOpen && (
         <div 
           className="fixed inset-0 z-30 bg-black/50 md:hidden" 
-          onClick={() => setSidebarOpen(false)}
+          onClick={toggleSidebar}
         />
       )}
     </div>
