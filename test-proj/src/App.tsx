@@ -6,6 +6,7 @@ import ProjectPage from './pages/ProjectPage'
 import ThreadPage from './pages/ThreadPage'
 import MainLayout from './layouts/MainLayout'
 import { ProjectsProvider } from './components/Sidebar'
+//import 'prismjs/themes/prism-tomorrow.css'
 
 const App: React.FC = () => {
   const { isAuthenticated, loading } = useAuth()

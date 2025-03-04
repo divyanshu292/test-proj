@@ -55,14 +55,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
 
   return (
     <div className="relative">
-      <div className="rounded-lg border border-gray-700 bg-gray-800">
+      <div className="rounded-lg border border-gray-700 bg-transparent">
         <Textarea
           ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask Claude anything..."
-          className="min-h-[52px] max-h-[200px] resize-none border-0 bg-gray-800 text-gray-200 placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 p-1"
+          className="min-h-[40px] max-h-[120px] resize-none border-0 bg-transparent text-gray-200 placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 p-1"
           rows={1}
           disabled={isTyping || isDisabled}
         />
