@@ -126,12 +126,12 @@ const MessageFormatter: React.FC<MessageFormatterProps> = ({ content }) => {
         {processedParts.map((part, index) => {
           if (part.type === 'code') {
             return (
-              <div key={index} className="my-4 rounded-md overflow-hidden">
-                <div className="bg-gray-800 text-gray-300 px-4 py-1 text-xs font-mono border-b border-gray-700 flex justify-between items-center">
-                  <span>{part.language}</span>
-                  <CopyButton text={part.content} />
+              <div key={index} className="my-4 rounded-lg overflow-hidden border border-gray-700 shadow-sm">
+                <div className="bg-gray-800 text-gray-300 px-4 py-2 text-xs font-mono border-b border-gray-700 flex justify-between items-center">
+                  <span className="font-medium">{part.language}</span>
+                  <CopyButton text={part.content} className="hover:bg-gray-700/70" />
                 </div>
-                <pre className="bg-gray-800 p-4 overflow-x-auto">
+                <pre className="bg-gray-800/60 p-4 overflow-x-auto rounded-b-lg">
                   <code className={`language-${part.language}`}>{part.content}</code>
                 </pre>
               </div>
@@ -153,4 +153,4 @@ const MessageFormatter: React.FC<MessageFormatterProps> = ({ content }) => {
   return formatContent();
 };
 
-export default MessageFormatter;
+export default MessageFormatter

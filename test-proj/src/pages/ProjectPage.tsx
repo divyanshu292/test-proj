@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 import { useProjects } from '../components/Sidebar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -21,20 +20,22 @@ interface Project {
 }
 
 const ProjectPage: React.FC = () => {
-  const { currentUser } = useAuth()
   const { projects, addThreadToProject } = useProjects()
   const navigate = useNavigate()
   
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [newThreadDialogOpen, setNewThreadDialogOpen] = useState<boolean>(false)
   const [newThreadName, setNewThreadName] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  // Use the first project by default, or update when projects change
+  // Set the first project as selected when projects are loaded
   useEffect(() => {
-    if (projects.length > 0 && !selectedProject) {
+    if (projects.length > 0) {
       setSelectedProject(projects[0]);
     }
-  }, [projects, selectedProject]);
+    // Always set loading to false after checking
+    setIsLoading(false);
+  }, [projects]);
 
   const handleThreadClick = (threadId: string) => {
     if (selectedProject) {
@@ -62,6 +63,15 @@ const ProjectPage: React.FC = () => {
     }
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col h-full items-center justify-center bg-gray-900">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+        <p className="text-gray-400 mt-4">Loading projects...</p>
+      </div>
+    );
+  }
+
   if (!selectedProject) {
     return (
       <div className="flex flex-col h-full items-center justify-center bg-gray-900">
@@ -75,12 +85,24 @@ const ProjectPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full p-4 md:p-6 bg-gray-900">
-      <header className="mb-4 md:mt-0">
-        <h1 className="text-2xl font-bold text-gray-100">{selectedProject.name}</h1>
-        <p className="text-gray-400 text-sm">Select a thread or create a new one</p>
+      <header className="mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-100">{selectedProject.name}</h1>
+            <p className="text-gray-400 text-sm">Select a thread or create a new one</p>
+          </div>
+          
+          <Button 
+            onClick={() => setNewThreadDialogOpen(true)}
+            className="bg-purple-700 hover:bg-purple-600"
+            size="sm"
+          >
+            <Plus className="h-4 w-4 mr-2" /> New Thread
+          </Button>
+        </div>
       </header>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Thread cards */}
         {selectedProject.threads.map(thread => (
           <Card 

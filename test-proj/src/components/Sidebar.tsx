@@ -3,10 +3,21 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import ProjectListTile from './ProjectListTile'
+import SearchBar from './SearchBar'
 import { Button } from '@/components/ui/button'
-import { Plus, LogOut } from 'lucide-react'
+import { Plus, LogOut, Settings } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatars'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Badge } from '@/components/ui/badge'
 
 interface Thread {
   id: string;
@@ -97,34 +108,70 @@ const Sidebar: React.FC = () => {
       <div className="p-2 border-b border-gray-700">
         <div className="flex items-center space-x-2">
           <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
-            C
+            TM
           </div>
-          <h1 className="text-lg font-bold text-gray-100">Claude</h1>
+          <h1 className="text-lg font-bold text-gray-100">TrulyMadly Internal Tool</h1>
         </div>
       </div>
 
       {/* User info */}
       <div className="p-2 border-b border-gray-700">
         <div className="flex items-center">
-          <div className="w-8 h-8 rounded-full bg-gray-700 mr-2 overflow-hidden">
-            {currentUser?.picture ? (
-              <img src={currentUser.picture} alt={currentUser.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-purple-800 text-purple-100 font-bold">
-                {currentUser?.name?.charAt(0) || 'U'}
-              </div>
-            )}
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Avatar className="h-9 w-9 mr-2">
+                  {currentUser?.picture ? (
+                    <AvatarImage src={currentUser.picture} alt={currentUser.name || 'User'} />
+                  ) : (
+                    <AvatarFallback className="bg-purple-800 text-purple-100 font-bold">
+                      {currentUser?.name?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="bg-gray-800 text-gray-200 border-gray-700">
+                <p>Signed in as {currentUser?.name || 'User'}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
           <div className="flex-1 min-w-0">
-            <p className="font-medium truncate text-sm text-gray-200">{currentUser?.name || 'User'}</p>
+            <p className="font-medium truncate text-sm text-gray-200 flex items-center">
+              {currentUser?.name || 'User'} 
+              <Badge variant="purple" className="ml-2 text-xs px-1">Pro</Badge>
+            </p>
             <p className="text-xs text-gray-400 truncate">{currentUser?.email || ''}</p>
           </div>
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700" onClick={handleLogout}>
-            <LogOut className="h-4 w-4" />
-          </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700 text-gray-200">
+              <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer">
+                Profile Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer">
+                Preferences
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-gray-700" />
+              <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer text-red-400" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
+      {/* Search Bar */}
+      <div className="p-2 border-b border-gray-700">
+        <SearchBar />
+      </div>
+      
       {/* New Project Button */}
       <div className="p-2">
         <Button 

@@ -1,6 +1,5 @@
 import * as React from 'react'
 const { createContext, useContext, useEffect, useState } = React
-type ReactNode = React.ReactNode
 import { io, Socket } from 'socket.io-client'
 import { useAuth } from './AuthContext'
 
@@ -25,7 +24,7 @@ export const useSocket = (): SocketContextType => {
 };
 
 interface SocketProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
@@ -36,7 +35,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       // Initialize socket connection
-      const socketInstance = io('http://localhost:8000', {
+      console.log("Initializing socket connection...");
+      
+      // Define the socket endpoint - adjust as needed for your backend
+      const socketEndpoint = 'http://localhost:8000';
+      
+      const socketInstance = io(socketEndpoint, {
         path: '/sockets',
         transports: ['websocket'],
         upgrade: false,
@@ -47,12 +51,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
           userId: currentUser.id,
           userName: currentUser.name
         },
-        // Increase timeout for longer API responses
-        timeout: 120000
+        timeout: 120000 // 2 minutes timeout for longer API responses
       });
 
       socketInstance.on('connect', () => {
-        console.log('Socket connected');
+        console.log('Socket connected successfully');
         setConnected(true);
       });
 
@@ -62,20 +65,26 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socketInstance.on('connect_error', (error) => {
-        console.log('Socket connection error:', error);
+        console.error('Socket connection error:', error);
         setConnected(false);
         
-        // Optional: For demo purposes only - Simulate connection after delay
-        // Comment this in production
-        console.log('Simulating connection for demo');
+        // For development/demo purposes - enable if you want to simulate connection
+        console.log('Simulating connection for demo mode');
         setTimeout(() => setConnected(true), 1000);
       });
 
+      // Set the socket instance
       setSocket(socketInstance);
 
+      // Cleanup on unmount
       return () => {
+        console.log('Cleaning up socket connection');
         socketInstance.disconnect();
       };
+    } else {
+      // If not authenticated, ensure socket is disconnected
+      setSocket(null);
+      setConnected(false);
     }
   }, [isAuthenticated, currentUser]);
 
@@ -85,3 +94,5 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     </SocketContext.Provider>
   );
 };
+
+export default SocketContext;
