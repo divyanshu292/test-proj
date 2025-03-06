@@ -278,27 +278,47 @@ const ThreadPage: React.FC = () => {
         </div>
       </header>
       
-      {/* Messages container */}
-      <div className="flex-1 overflow-y-auto p-4 w-[70%] mx-auto">
-  <div className="max-w-1xl mx-auto space-y-20">
-    {messages.length === 0 && (
-      <div className="text-center text-gray-400 py-8">
-        No messages yet. Start a conversation!
+      {/* Messages container with mask for fade effect */}
+      <div className="flex-1 overflow-y-auto w-[70%] mx-auto">
+        {/* Mask container with fading effects */}
+        <div className="relative">
+          {/* Top fade mask */}
+          <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
+               style={{ 
+                 background: 'linear-gradient(to bottom, rgba(17, 24, 39, 1) 0%, rgba(17, 24, 39, 0.9) 30%, rgba(17, 24, 39, 0.1) 90%, transparent 100%)',
+                 zIndex: 10 
+               }}>
+          </div>
+          
+          {/* Bottom fade mask */}
+          <div className="absolute bottom-0 left-0 right-0 h-0 pointer-events-none"
+               style={{ 
+                 background: 'linear-gradient(to top, rgba(17, 24, 39, 1) 0%, rgba(17, 24, 39, 0.9) 30%, rgba(17, 24, 39, 0.1) 90%, transparent 100%)',
+                 zIndex: 10 
+               }}>
+          </div>
+          
+          {/* Messages with padding for fade zones */}
+          <div className="p-4 pt-24 pb-10">
+            <div className="max-w-1xl mx-auto space-y-20">
+              {messages.length === 0 && (
+                <div className="text-center text-gray-400 py-8">
+                  No messages yet. Start a conversation!
+                </div>
+              )}
+              {messages.map(message => (
+                <MessageTile key={message.id} message={message} />
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+        </div>
       </div>
-    )}
-    {messages.map(message => (
-      <MessageTile key={message.id} message={message} />
-    ))}
-    <div ref={messagesEndRef} />
-  </div>
-</div>
       
-      {/* Chat input */}
-      <div className="p-2 border-t border-gray-700">
-  <div className="max-w-4xl mx-auto">
-    <ChatInput onSendMessage={handleSendMessage} isTyping={isTyping} />
-  </div>
-</div>
+      {/* Chat input - Removed the border/container outside */}
+      <div className="max-w-4xl mx-auto w-full pb-4">
+        <ChatInput onSendMessage={handleSendMessage} isTyping={isTyping} />
+      </div>
     </div>
   )
 }

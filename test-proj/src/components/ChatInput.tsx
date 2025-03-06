@@ -69,7 +69,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
   }
 
   return (
-    <div className="relative px-4 pb-4">
+    <div className="relative px-4">
       <div className="rounded-3xl border border-gray-700 bg-gray-800/40 backdrop-blur-sm shadow-lg hover:shadow-purple-900/10 transition-all">
         <div className="flex items-center">
           <Textarea
@@ -133,17 +133,17 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
       </div>
       
       {!connected && (
-        <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-red-900/70 rounded-full text-xs text-gray-200 border border-red-700 shadow-sm flex items-center">
+        <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-red-900/70 rounded-full text-xs text-gray-200 border border-red-700 shadow-sm flex items-center z-50">
           <span className="w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
           API Server Offline
         </div>
       )}
       
       {isTyping && (
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 py-1 px-3 bg-gray-800/70 backdrop-blur-sm rounded-full text-xs text-gray-300 border border-gray-700 shadow-sm flex items-center gap-2">
-          <Loader className="h-3 w-3 animate-spin" />
-          <span>AI is thinking...</span>
-          <Badge variant="purple" className="ml-1 text-xs px-1.5 py-0 h-4">
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 py-1.5 px-4 bg-gray-800 backdrop-blur-none rounded-full text-sm text-gray-200 border border-gray-600 shadow-lg flex items-center gap-2 z-50">
+          <Loader className="h-3.5 w-3.5 animate-spin text-purple-400" />
+          <span className="font-medium">AI is thinking...</span>
+          <Badge variant="purple" className="ml-1 text-xs px-1.5 py-0.5 h-5 bg-purple-600">
             {getModelShortName()}
           </Badge>
         </div>
