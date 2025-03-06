@@ -279,26 +279,26 @@ const ThreadPage: React.FC = () => {
       </header>
       
       {/* Messages container */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="max-w-1xl mx-auto space-y-4">
-          {messages.length === 0 && (
-            <div className="text-center text-gray-400 py-8">
-              No messages yet. Start a conversation!
-            </div>
-          )}
-          {messages.map(message => (
-            <MessageTile key={message.id} message={message} />
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
+      <div className="flex-1 overflow-y-auto p-4 w-[70%] mx-auto">
+  <div className="max-w-1xl mx-auto space-y-20">
+    {messages.length === 0 && (
+      <div className="text-center text-gray-400 py-8">
+        No messages yet. Start a conversation!
       </div>
+    )}
+    {messages.map(message => (
+      <MessageTile key={message.id} message={message} />
+    ))}
+    <div ref={messagesEndRef} />
+  </div>
+</div>
       
       {/* Chat input */}
       <div className="p-2 border-t border-gray-700">
-        <div className="max-w-1xl mx-auto">
-          <ChatInput onSendMessage={handleSendMessage} isTyping={isTyping} />
-        </div>
-      </div>
+  <div className="max-w-4xl mx-auto">
+    <ChatInput onSendMessage={handleSendMessage} isTyping={isTyping} />
+  </div>
+</div>
     </div>
   )
 }

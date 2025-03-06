@@ -32,8 +32,8 @@ const LoginPage: React.FC = () => {
           </div>
           <CardTitle className="text-3xl font-bold text-gray-100">TrulyMadly</CardTitle>
           <CardDescription className="text-gray-400">
-            Internal AI Tool
-            <Badge className="ml-2 bg-purple-700 text-white hover:bg-purple-600">Enterprise</Badge>
+            Internal Tool
+            <Badge className="ml-2 bg-purple-700 text-white hover:bg-purple-600">abcd</Badge>
           </CardDescription>
         </CardHeader>
         
@@ -42,15 +42,15 @@ const LoginPage: React.FC = () => {
             <div className="bg-gray-700/50 rounded-lg p-4 space-y-3">
               <div className="flex items-center text-sm text-gray-300">
                 <ShieldCheckIcon className="h-4 w-4 mr-2 text-purple-400" />
-                <span>Secure authentication</span>
+                <span>Not so Secure authentication</span>
               </div>
               <div className="flex items-center text-sm text-gray-300">
                 <LockIcon className="h-4 w-4 mr-2 text-purple-400" />
-                <span>End-to-end encryption</span>
+                <span>End-to-end encryption is a myth</span>
               </div>
               <div className="flex items-center text-sm text-gray-300">
                 <Globe className="h-4 w-4 mr-2 text-purple-400" />
-                <span>Access from anywhere</span>
+                <span>Access from local machine</span>
               </div>
             </div>
             
@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
         
         <CardFooter className="flex flex-col items-center">
           <p className="text-xs text-center text-gray-400 mt-4">
-            By signing in, you agree to our Terms of Service and Privacy Policy
+            By signing in....
           </p>
         </CardFooter>
       </Card>

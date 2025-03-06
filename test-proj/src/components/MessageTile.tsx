@@ -22,7 +22,7 @@ const MessageTile: React.FC<MessageTileProps> = ({ message }) => {
   
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-      <div className={`max-w-[95%] md:max-w-[85%] rounded-2xl px-3 py-2 ${
+      <div className={`max-w-[80%] md:max-w-[65%] rounded-3xl px-4 py-4 ${
         isUser 
           ? 'bg-purple-700 text-white' 
           : 'bg-gray-800 border border-gray-700 text-gray-100'

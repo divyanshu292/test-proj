@@ -70,7 +70,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
 
   return (
     <div className="relative px-4 pb-4">
-      <div className="rounded-full border border-gray-700 bg-gray-800/40 backdrop-blur-sm shadow-lg hover:shadow-purple-900/10 transition-all">
+      <div className="rounded-3xl border border-gray-700 bg-gray-800/40 backdrop-blur-sm shadow-lg hover:shadow-purple-900/10 transition-all">
         <div className="flex items-center">
           <Textarea
             ref={textareaRef}
@@ -78,7 +78,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask anything..."
-            className="min-h-[44px] max-h-[120px] resize-none border-0 bg-transparent text-gray-200 placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 py-3 px-4 rounded-l-full"
+            className="min-h-[44px] max-h-[120px] resize-none border-0 bg-transparent text-gray-200 placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 py-3 px-4"
             rows={1}
             disabled={isTyping || isDisabled}
           />
@@ -86,7 +86,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-400 hover:text-gray-200 hover:bg-gray-700/50">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-gray-400 hover:text-gray-200 hover:bg-gray-700/50">
                     <Paperclip className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>

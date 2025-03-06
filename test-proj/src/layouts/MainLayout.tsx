@@ -33,14 +33,14 @@ const MainLayout: React.FC = () => {
   };
   
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-900">
+    <div className="flex h-screen overflow-hidden ">
       {/* Mobile sidebar toggle - only visible on mobile */}
       <div className={`fixed top-4 left-4 z-50 md:hidden ${sidebarOpen ? 'hidden' : 'block'}`}>
         <Button 
           variant="outline" 
           size="icon" 
           onClick={toggleSidebar}
-          className="rounded-full shadow-md bg-gray-800 border-gray-700"
+          className="rounded-full shadow-md border-gray-700"
         >
           <Menu className="h-5 w-5 text-gray-300" />
         </Button>
