@@ -111,17 +111,17 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex h-full flex-col bg-gray-800 border-r border-gray-700 w-64">
       {/* Header */}
-      <div className="p-2 border-b border-gray-700">
+      {/* <div className="p-2 border-b border-gray-700">
         <div className="flex items-center space-x-2">
           <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
             TM
           </div>
           <h1 className="text-lg font-bold text-gray-100">TrulyMadly Internal Tool</h1>
         </div>
-      </div>
+      </div> */}
 
       {/* Search Bar */}
-      <div className="p-2 border-b border-gray-700">
+      <div className="p-2 border-b border-gray-700 pb-3">
         <SearchBar />
       </div>
       
