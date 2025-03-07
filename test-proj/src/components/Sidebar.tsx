@@ -21,6 +21,9 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 
+// Import your logo - update the path to match your project structure
+import companyLogo from '../assets/logo.webp' // Change this to your actual logo file name and extension
+
 interface Thread {
   id: string;
   name: string;
@@ -110,16 +113,15 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="flex h-full flex-col bg-gray-800 border-r border-gray-700 w-64">
-      {/* Header */}
-      {/* <div className="p-2 border-b border-gray-700">
-        <div className="flex items-center space-x-2">
-          <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
-            TM
-          </div>
-          <h1 className="text-lg font-bold text-gray-100">TrulyMadly Internal Tool</h1>
-        </div>
-      </div> */}
-
+      {/* Company Logo Section */}
+      <div className="p-4 flex justify-center items-center border-b border-gray-700">
+        <img 
+          src={companyLogo} 
+          alt="Company Logo" 
+          className="h-10 max-w-full object-contain"
+        />
+      </div>
+      
       {/* Search Bar */}
       <div className="p-2 border-b border-gray-700 pb-3">
         <SearchBar />
@@ -143,7 +145,7 @@ const Sidebar: React.FC = () => {
         ))}
       </div>
       
-      {/* User info - Now moved to bottom */}
+      {/* User info - Now with preferences button outside dropdown */}
       <div className="p-2 border-t border-gray-700 mt-auto">
         <div className="flex items-center">
           <TooltipProvider>
@@ -173,34 +175,49 @@ const Sidebar: React.FC = () => {
             <p className="text-xs text-gray-400 truncate">{currentUser?.email || ''}</p>
           </div>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700">
-                <Settings className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700 text-gray-200">
-              <DropdownMenuItem 
-                className="hover:bg-gray-700 cursor-pointer"
-                onClick={() => setProfileSettingsOpen(true)}
-              >
-                <User className="h-4 w-4 mr-2" />
-                Profile Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                className="hover:bg-gray-700 cursor-pointer"
-                onClick={() => setPreferencesOpen(true)}
-              >
-                <Sliders className="h-4 w-4 mr-2" />
-                Preferences
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-700" />
-              <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer text-red-400" onClick={handleLogout}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center">
+            {/* Preferences Button - Now outside the dropdown */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
+                    onClick={() => setPreferencesOpen(true)}
+                  >
+                    <Sliders className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Preferences</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            {/* Settings dropdown - without preferences option */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700 text-gray-200">
+                <DropdownMenuItem 
+                  className="hover:bg-gray-700 cursor-pointer"
+                  onClick={() => setProfileSettingsOpen(true)}
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  Profile Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-gray-700" />
+                <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer text-red-400" onClick={handleLogout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
 

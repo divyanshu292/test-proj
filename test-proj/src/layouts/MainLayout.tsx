@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
-import ModelSelector from '../components/ModelSelector'
 import { useAuth } from '../contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, ChevronLeft, Menu } from 'lucide-react'
@@ -92,10 +91,7 @@ const MainLayout: React.FC = () => {
           </div>
         )}
         <div className={`${!sidebarOpen ? 'md:pl-14' : ''} h-full relative`}>
-          {/* Model selector in top right */}
-          <div className="absolute top-4 right-4 z-10">
-            <ModelSelector />
-          </div>
+          {/* Removed the model selector from top right */}
           <Outlet />
         </div>
       </div>

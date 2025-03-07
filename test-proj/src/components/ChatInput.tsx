@@ -2,9 +2,9 @@ import * as React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Send, Paperclip, Loader, Sparkles } from 'lucide-react'
+import { Send, Paperclip, Loader } from 'lucide-react'
 import { useSocket } from '../contexts/SocketContext'
-import { useModel } from './ModelSelector'
+import ModelSelector, { useModel } from './ModelSelector'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 
@@ -99,9 +99,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-purple-400 hover:text-purple-300 hover:bg-gray-700/50">
-                    <Sparkles className="h-4 w-4" />
-                  </Button>
+                  <div>
+                    <ModelSelector variant="compact" />
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
                   <p>Using {getFormattedModelName()}</p>

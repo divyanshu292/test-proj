@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect } from 'react'
-import { Check, ChevronsUpDown } from 'lucide-react'
+import { Check, ChevronsUpDown, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -82,22 +82,47 @@ export const ModelProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-const ModelSelector: React.FC = () => {
+interface ModelSelectorProps {
+  variant?: 'default' | 'compact';
+}
+
+const ModelSelector: React.FC<ModelSelectorProps> = ({ variant = 'default' }) => {
   const [open, setOpen] = useState(false)
   const { model, setModel } = useModel()
+  
+  // Get the formatted model name for display
+  const getFormattedModelName = () => {
+    return model.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+  
+  // Get the model short name for badge
+  const getModelShortName = () => {
+    const parts = model.split('-');
+    return parts[parts.length - 1].toUpperCase();
+  }
   
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between bg-gray-800 border-gray-700 text-gray-100"
-        >
-          {model ? models.find((m) => m.value === model)?.label : "Select model..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+        {variant === 'default' ? (
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-[200px] justify-between bg-gray-800 border-gray-700 text-gray-100"
+          >
+            {model ? models.find((m) => m.value === model)?.label : "Select model..."}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        ) : (
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 rounded-full text-purple-400 hover:text-purple-300 hover:bg-gray-700/50"
+          >
+            <Sparkles className="h-4 w-4" />
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0 bg-gray-800 border-gray-700">
         <Command className="bg-gray-800">
