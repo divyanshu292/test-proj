@@ -3,38 +3,18 @@ import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import { useAuth } from '../contexts/AuthContext'
+import { SidebarProvider, useSidebar } from '../contexts/SidebarContext'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, ChevronLeft, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 
-const MainLayout: React.FC = () => {
+const MainLayoutContent: React.FC = () => {
   const { currentUser } = useAuth()
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true)
-  
-  // Handle responsive behavior
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setSidebarOpen(false);
-      } else {
-        setSidebarOpen(true);
-      }
-    };
-
-    // Set initial state based on screen size
-    handleResize();
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const { collapsed: sidebarClosed, toggleSidebar } = useSidebar()
   
   return (
     <div className="flex h-screen overflow-hidden ">
       {/* Mobile sidebar toggle - only visible on mobile */}
-      <div className={`fixed top-4 left-4 z-50 md:hidden ${sidebarOpen ? 'hidden' : 'block'}`}>
+      <div className={`fixed top-4 left-4 z-50 md:hidden ${!sidebarClosed ? 'hidden' : 'block'}`}>
         <Button 
           variant="outline" 
           size="icon" 
@@ -50,35 +30,23 @@ const MainLayout: React.FC = () => {
         className={`
           fixed md:static inset-y-0 left-0 z-40 
           transition-all duration-300 ease-in-out
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:-translate-x-64'} 
-          ${sidebarOpen ? 'w-64' : 'w-0 md:w-0 overflow-hidden'}
+          ${!sidebarClosed ? 'translate-x-0' : '-translate-x-full md:-translate-x-64'} 
+          ${!sidebarClosed ? 'w-64' : 'w-0 md:w-0 overflow-hidden'}
         `}
       >
         <div className="h-full relative">
           <Sidebar />
-          
-          {/* Desktop sidebar toggle - shown on right edge of sidebar */}
-          <div className="hidden md:block absolute -right-3 top-1/2 transform -translate-y-1/2">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={toggleSidebar}
-              className="rounded-full h-6 w-6 shadow-md bg-gray-800 border-gray-700 text-gray-300"
-            >
-              {sidebarOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-            </Button>
-          </div>
         </div>
       </div>
       
       {/* Main content */}
       <div className={`
         flex-1 overflow-auto relative p-0
-        ${!sidebarOpen && 'ml-0'}
+        ${sidebarClosed && 'ml-0'}
         transition-all duration-300
       `}>
         {/* Desktop collapsed sidebar toggle button */}
-        {!sidebarOpen && (
+        {sidebarClosed && (
           <div className="hidden md:block absolute left-4 top-4 z-10">
             <Button 
               variant="outline" 
@@ -90,14 +58,13 @@ const MainLayout: React.FC = () => {
             </Button>
           </div>
         )}
-        <div className={`${!sidebarOpen ? 'md:pl-14' : ''} h-full relative`}>
-          {/* Removed the model selector from top right */}
+        <div className={`${sidebarClosed ? 'md:pl-14' : ''} h-full relative`}>
           <Outlet />
         </div>
       </div>
       
       {/* Mobile overlay - only appears when sidebar is open on mobile */}
-      {sidebarOpen && (
+      {!sidebarClosed && (
         <div 
           className="fixed inset-0 z-30 bg-black/70 md:hidden" 
           onClick={toggleSidebar}
@@ -105,6 +72,14 @@ const MainLayout: React.FC = () => {
       )}
     </div>
   )
-}
+};
+
+const MainLayout: React.FC = () => {
+  return (
+    <SidebarProvider>
+      <MainLayoutContent />
+    </SidebarProvider>
+  );
+};
 
 export default MainLayout

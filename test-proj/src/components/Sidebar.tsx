@@ -2,11 +2,12 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useSidebar } from '../contexts/SidebarContext'
 import ProjectListTile from './ProjectListTile'
 import ProfileSettings from './ProfileSettings'
 import PreferencesDialog from './PreferencesDialog'
 import { Button } from '@/components/ui/button'
-import { LogOut, Sliders, Search, FolderPlus } from 'lucide-react'
+import { LogOut, Sliders, Search, FolderPlus, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatars'
@@ -205,6 +206,7 @@ const SearchDialog: React.FC<{
 const Sidebar: React.FC = () => {
   const { currentUser, logout } = useAuth()
   const { projects, setProjects } = useProjects()
+  const { collapsed, toggleSidebar } = useSidebar()
   const navigate = useNavigate()
   const [newProjectDialogOpen, setNewProjectDialogOpen] = useState<boolean>(false)
   const [newProjectName, setNewProjectName] = useState<string>('')
@@ -239,10 +241,11 @@ const Sidebar: React.FC = () => {
         <img 
           src={companyLogo} 
           alt="Company Logo" 
-          className="h-8 max-w-[120px] object-contain"
+          className="h-8 max-w-[100px] object-contain"
         />
         
         <div className="flex items-center">
+          {/* Search Button */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -261,13 +264,14 @@ const Sidebar: React.FC = () => {
             </Tooltip>
           </TooltipProvider>
           
+          {/* New Project Button */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
+                  className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
                   onClick={() => setNewProjectDialogOpen(true)}
                 >
                   <FolderPlus className="h-4 w-4" />
@@ -275,6 +279,28 @@ const Sidebar: React.FC = () => {
               </TooltipTrigger>
               <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
                 <p>Create new project</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          {/* Collapse Sidebar Button - Now rightmost */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
+                  onClick={toggleSidebar}
+                >
+                  {collapsed ? 
+                    <PanelLeftOpen className="h-4 w-4" /> : 
+                    <PanelLeftClose className="h-4 w-4" />
+                  }
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
+                <p>{collapsed ? 'Expand sidebar' : 'Collapse sidebar'}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
