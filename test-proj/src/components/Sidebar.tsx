@@ -241,7 +241,7 @@ const Sidebar: React.FC = () => {
         <img 
           src={companyLogo} 
           alt="Company Logo" 
-          className="h-8 max-w-[100px] object-contain"
+          className="h-12 max-w-[100px] object-contain"
         />
         
         <div className="flex items-center">
