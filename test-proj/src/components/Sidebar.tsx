@@ -234,90 +234,151 @@ const Sidebar: React.FC = () => {
     }
   }
 
+  // Navigate to home when logo is clicked
+  const navigateToHome = () => {
+    navigate('/')
+  }
+
   return (
-    <div className="flex h-full flex-col bg-gray-800 border-r border-gray-700 w-64">
+    <div className={`flex h-full flex-col bg-gray-800 border-r border-gray-700 ${collapsed ? 'w-16' : 'w-64'} transition-all duration-300`}>
       {/* Company Logo and Action Buttons Section */}
-      <div className="p-2 flex items-center justify-between border-b border-gray-700">
+      <div className={`p-2 flex ${collapsed ? 'flex-col' : 'items-center justify-between'} border-b border-gray-700`}>
+        {/* Company Logo - Now clickable */}
         <img 
           src={companyLogo} 
           alt="Company Logo" 
-          className="h-12 max-w-[100px] object-contain"
+          className={`${collapsed ? 'h-10 w-10 mx-auto mb-2' : 'h-12 max-w-[100px]'} object-contain cursor-pointer transition-all`}
+          onClick={navigateToHome}
         />
         
-        <div className="flex items-center">
-          {/* Search Button */}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
-                  onClick={() => setSearchDialogOpen(true)}
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
-                <p>Search</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          
-          {/* New Project Button */}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
-                  onClick={() => setNewProjectDialogOpen(true)}
-                >
-                  <FolderPlus className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
-                <p>Create new project</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          
-          {/* Collapse Sidebar Button - Now rightmost */}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
-                  onClick={toggleSidebar}
-                >
-                  {collapsed ? 
-                    <PanelLeftOpen className="h-4 w-4" /> : 
+        {collapsed ? (
+          // Collapsed view - icons stacked vertically
+          <div className="flex flex-col items-center space-y-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
+                    onClick={() => setSearchDialogOpen(true)}
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Search</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
+                    onClick={() => setNewProjectDialogOpen(true)}
+                  >
+                    <FolderPlus className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Create new project</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
+                    onClick={toggleSidebar}
+                  >
+                    <PanelLeftOpen className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Expand sidebar</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        ) : (
+          // Expanded view - icons in a row
+          <div className="flex items-center">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
+                    onClick={() => setSearchDialogOpen(true)}
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Search</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
+                    onClick={() => setNewProjectDialogOpen(true)}
+                  >
+                    <FolderPlus className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Create new project</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-gray-300 hover:text-gray-100 hover:bg-gray-700"
+                    onClick={toggleSidebar}
+                  >
                     <PanelLeftClose className="h-4 w-4" />
-                  }
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
-                <p>{collapsed ? 'Expand sidebar' : 'Collapse sidebar'}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="bg-gray-800 text-gray-200 border-gray-700">
+                  <p>Collapse sidebar</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        )}
       </div>
 
       {/* Projects List */}
       <div className="flex-1 overflow-y-auto p-1">
-        {projects.map(project => (
+        {!collapsed && projects.map(project => (
           <ProjectListTile key={project.id} project={project} />
         ))}
       </div>
       
       {/* User info - Profile image opens profile settings, icons on right */}
-      <div className="p-2 border-t border-gray-700 mt-auto">
-        <div className="flex items-center justify-between">
-          {/* Profile Image on Left */}
+      <div className={`p-2 border-t border-gray-700 mt-auto ${collapsed ? 'flex justify-center' : ''}`}>
+        {collapsed ? (
+          // Collapsed view - just show avatar
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -334,62 +395,88 @@ const Sidebar: React.FC = () => {
                   )}
                 </Avatar>
               </TooltipTrigger>
-              <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
+              <TooltipContent side="right" className="bg-gray-800 text-gray-200 border-gray-700">
                 <p>Profile Settings</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          
-          {/* User Info in Middle */}
-          <div className="flex-1 min-w-0 mx-2">
-            <p className="font-medium truncate text-sm text-gray-200 flex items-center">
-              {currentUser?.name || 'User'} 
-              <Badge variant="purple" className="ml-2 text-xs px-1">Pro</Badge>
-            </p>
-            <p className="text-xs text-gray-400 truncate">{currentUser?.email || ''}</p>
-          </div>
-          
-          {/* Buttons on Right */}
-          <div className="flex items-center">
-            {/* Preferences Button */}
+        ) : (
+          // Expanded view - show full user info
+          <div className="flex items-center justify-between">
+            {/* Profile Image on Left */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
-                    onClick={() => setPreferencesOpen(true)}
+                  <Avatar 
+                    className="h-9 w-9 cursor-pointer"
+                    onClick={() => setProfileSettingsOpen(true)}
                   >
-                    <Sliders className="h-4 w-4" />
-                  </Button>
+                    {currentUser?.picture ? (
+                      <AvatarImage src={currentUser.picture} alt={currentUser.name || 'User'} />
+                    ) : (
+                      <AvatarFallback className="bg-purple-800 text-purple-100 font-bold">
+                        {currentUser?.name?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
                 </TooltipTrigger>
                 <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
-                  <p>Preferences</p>
+                  <p>Profile Settings</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
             
-            {/* Logout Button */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-7 w-7 text-red-400 hover:text-red-300 hover:bg-gray-700"
-                    onClick={handleLogout}
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
-                  <p>Logout</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            {/* User Info in Middle */}
+            <div className="flex-1 min-w-0 mx-2">
+              <p className="font-medium truncate text-sm text-gray-200 flex items-center">
+                {currentUser?.name || 'User'} 
+                <Badge variant="purple" className="ml-2 text-xs px-1">Pro</Badge>
+              </p>
+              <p className="text-xs text-gray-400 truncate">{currentUser?.email || ''}</p>
+            </div>
+            
+            {/* Buttons on Right */}
+            <div className="flex items-center">
+              {/* Preferences Button */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-7 w-7 text-gray-300 hover:text-gray-100 hover:bg-gray-700 mr-1"
+                      onClick={() => setPreferencesOpen(true)}
+                    >
+                      <Sliders className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
+                    <p>Preferences</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              {/* Logout Button */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-7 w-7 text-red-400 hover:text-red-300 hover:bg-gray-700"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="bg-gray-800 text-gray-200 border-gray-700">
+                    <p>Logout</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* New Project Dialog */}

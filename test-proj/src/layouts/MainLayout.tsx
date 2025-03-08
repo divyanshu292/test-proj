@@ -5,14 +5,14 @@ import Sidebar from '../components/Sidebar'
 import { useAuth } from '../contexts/AuthContext'
 import { SidebarProvider, useSidebar } from '../contexts/SidebarContext'
 import { Button } from '@/components/ui/button'
-import { Menu } from 'lucide-react'
+import { Menu, PanelLeftOpen } from 'lucide-react'
 
 const MainLayoutContent: React.FC = () => {
   const { currentUser } = useAuth()
   const { collapsed: sidebarClosed, toggleSidebar } = useSidebar()
   
   return (
-    <div className="flex h-screen overflow-hidden ">
+    <div className="flex h-screen overflow-hidden">
       {/* Mobile sidebar toggle - only visible on mobile */}
       <div className={`fixed top-4 left-4 z-50 md:hidden ${!sidebarClosed ? 'hidden' : 'block'}`}>
         <Button 
@@ -45,7 +45,7 @@ const MainLayoutContent: React.FC = () => {
         ${sidebarClosed && 'ml-0'}
         transition-all duration-300
       `}>
-        {/* Desktop collapsed sidebar toggle button */}
+        {/* Desktop collapsed sidebar toggle button - Using PanelLeftOpen to match sidebar */}
         {sidebarClosed && (
           <div className="hidden md:block absolute left-4 top-4 z-10">
             <Button 
@@ -54,7 +54,7 @@ const MainLayoutContent: React.FC = () => {
               onClick={toggleSidebar}
               className="rounded-full h-8 w-8 shadow-md bg-gray-800 border-gray-700"
             >
-              <Menu className="h-4 w-4 text-gray-300" />
+              <PanelLeftOpen className="h-4 w-4 text-gray-300" />
             </Button>
           </div>
         )}
