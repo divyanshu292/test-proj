@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ChevronRight, ChevronDown, Plus } from 'lucide-react'
+import { ChevronRight, ChevronDown, Plus, Folder, FolderOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -30,6 +30,7 @@ const ProjectListTile: React.FC<ProjectListTileProps> = ({ project }) => {
   const [newThreadDialogOpen, setNewThreadDialogOpen] = useState<boolean>(false)
   const [newThreadName, setNewThreadName] = useState<string>('')
   const { addThreadToProject } = useProjects()
+  const [isHovered, setIsHovered] = useState<boolean>(false)
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded)
@@ -55,38 +56,58 @@ const ProjectListTile: React.FC<ProjectListTileProps> = ({ project }) => {
     }
   }
 
+  const isActive = projectId === project.id;
+
   return (
     <>
-      <div className="mb-1 rounded-lg overflow-hidden">
+      <div className="mb-2 rounded-lg overflow-hidden">
         {/* Project header */}
         <div 
-          className="flex items-center p-2 hover:bg-gray-700 cursor-pointer rounded-md"
+          className={`
+            flex items-center p-2 cursor-pointer rounded-lg transition-all
+            ${isActive 
+              ? 'bg-purple-900/30 text-purple-300' 
+              : 'text-gray-300 hover:bg-gray-800/60 hover:text-gray-100'
+            }
+          `}
           onClick={toggleExpand}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <div className="mr-1">
+          <div className="mr-2 flex items-center">
             {isExpanded ? (
-              <ChevronDown className="h-4 w-4 text-gray-400" />
+              <ChevronDown className={`h-4 w-4 ${isActive ? 'text-purple-400' : 'text-gray-500'}`} />
             ) : (
-              <ChevronRight className="h-4 w-4 text-gray-400" />
+              <ChevronRight className={`h-4 w-4 ${isActive ? 'text-purple-400' : 'text-gray-500'}`} />
             )}
           </div>
-          <div className="flex-1 font-medium truncate text-sm text-gray-200">{project.name}</div>
+          
+          <div className="mr-2">
+            {isExpanded ? (
+              <FolderOpen className={`h-4 w-4 ${isActive ? 'text-purple-400' : 'text-gray-400'}`} />
+            ) : (
+              <Folder className={`h-4 w-4 ${isActive ? 'text-purple-400' : 'text-gray-400'}`} />
+            )}
+          </div>
+          
+          <div className="flex-1 font-medium truncate text-sm">{project.name}</div>
+          
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 text-gray-400 hover:text-gray-200 hover:bg-gray-700"
+            className={`h-6 w-6 rounded-lg ${isActive ? 'text-purple-400 hover:text-purple-300 hover:bg-purple-900/40' : 'text-gray-500 hover:text-gray-300 hover:bg-gray-700/50'} ${!isHovered && !isActive && 'opacity-0'} transition-opacity`}
             onClick={(e) => {
               e.stopPropagation()
               setNewThreadDialogOpen(true)
             }}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3.5 w-3.5" />
           </Button>
         </div>
 
         {/* Thread list */}
         {isExpanded && (
-          <div className="pl-5 pr-2">
+          <div className="pl-6 pr-2 mt-1 space-y-1">
             {project.threads.map(thread => (
               <ThreadItem
                 key={thread.id}
@@ -95,7 +116,7 @@ const ProjectListTile: React.FC<ProjectListTileProps> = ({ project }) => {
               />
             ))}
             {project.threads.length === 0 && (
-              <div className="py-2 px-2 text-xs text-gray-400 italic">
+              <div className="py-2 px-2 text-xs text-gray-500 italic">
                 No threads yet
               </div>
             )}
@@ -105,7 +126,7 @@ const ProjectListTile: React.FC<ProjectListTileProps> = ({ project }) => {
 
       {/* New Thread Dialog */}
       <Dialog open={newThreadDialogOpen} onOpenChange={setNewThreadDialogOpen}>
-        <DialogContent className="bg-gray-800 border-gray-700 text-gray-100">
+        <DialogContent className="bg-gray-800 border-gray-700 text-gray-100 shadow-xl">
           <DialogHeader>
             <DialogTitle className="text-gray-100">Create New Thread in {project.name}</DialogTitle>
           </DialogHeader>
