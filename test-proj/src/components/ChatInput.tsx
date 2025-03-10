@@ -2,9 +2,9 @@ import * as React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Send, Paperclip, Loader, Sparkles, Image, SmilePlus } from 'lucide-react'
+import { Send, Paperclip, Loader } from 'lucide-react'
 import { useSocket } from '../contexts/SocketContext'
-import ModelSelector, { useModel } from './ModelSelector'
+import { useModel } from './ModelSelector'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 
@@ -57,11 +57,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
     }
   }
 
-  // Get the formatted model name for display
-  const getFormattedModelName = () => {
-    return model.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  }
-
   // Get the model short name for badge
   const getModelShortName = () => {
     const parts = model.split('-');
@@ -71,22 +66,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isTyping = false }
   return (
     <div className="relative px-4 sm:px-0">
       <div className="rounded-2xl border border-gray-700/50 bg-gray-800/60 backdrop-blur-lg shadow-xl hover:border-gray-600/70 transition-all">
-        {/* Add a toolbar above the input for formatting options */}
-        <div className="flex items-center px-3 pt-2 border-b border-gray-700/50">
-          <div className="flex space-x-1">
-            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-700/50">
-              <SmilePlus className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-700/50">
-              <Image className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="ml-auto">
-            <ModelSelector variant="compact" />
-          </div>
-        </div>
-        
         <div className="flex items-center">
           <Textarea
             ref={textareaRef}
